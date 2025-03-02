@@ -28,8 +28,8 @@ A open source structured Go application following best practices and modern arch
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/project-name.git
-cd project-name
+git clone https://github.com/robertfischer3/scrutiny-cnapp
+cd scrutiny-cnapp
 
 # Install dependencies
 go mod download
@@ -46,7 +46,7 @@ make run
 
 # Or build and run the binary
 make build
-./build/app
+./build/scrutiny-cnapp
 
 # Or using Docker
 docker-compose up

@@ -1,7 +1,7 @@
 package errors
 
 import (
-    "fmt"
+    
 )
 
 // ErrorType is the type of an error
