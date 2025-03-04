@@ -1,7 +1,7 @@
 .PHONY: build clean test run lint deps
 
 # Binary name
-BINARY_NAME=myapp
+BINARY_NAME=scrutiny
 
 # Go build and run parameters
 GOCMD=go
@@ -24,7 +24,7 @@ PACKAGES=$(shell go list ./... | grep -v /vendor/)
 build:
 	@echo "Building..."
 	mkdir -p $(BUILD_DIR)
-	$(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) ./cmd/myapp
+	$(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) ./cmd/cnapp
 
 # Run the application
 run:
@@ -62,6 +62,6 @@ deps:
 # Build for multiple platforms
 build-all: clean
 	@echo "Building for multiple platforms..."
-	GOOS=linux GOARCH=amd64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-linux-amd64 ./cmd/myapp
-	GOOS=darwin GOARCH=amd64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-darwin-amd64 ./cmd/myapp
-	GOOS=windows GOARCH=amd64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-windows-amd64.exe ./cmd/myapp
+	GOOS=linux GOARCH=amd64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-linux-amd64 ./cmd/scrutiny
+	GOOS=darwin GOARCH=amd64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-darwin-amd64 ./cmd/scrutiny
+	GOOS=windows GOARCH=amd64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-windows-amd64.exe ./cmd/scrutiny

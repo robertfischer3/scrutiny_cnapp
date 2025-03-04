@@ -1,4 +1,4 @@
-# Scrutiny-CNAPP
+# scrutiny_cnapp
 ### A fischer3.net project
 A open source structured Go application following best practices and modern architecture. This project provides a solid foundation for building scalable, maintainable CNAPP security applications.
 
@@ -28,8 +28,8 @@ A open source structured Go application following best practices and modern arch
 
 ```bash
 # Clone the repository
-git clone https://github.com/robertfischer3/scrutiny-cnapp
-cd scrutiny-cnapp
+git clone https://github.com/robertfischer3/scrutiny_cnapp
+cd scrutiny_cnapp
 
 # Install dependencies
 go mod download
@@ -46,7 +46,7 @@ make run
 
 # Or build and run the binary
 make build
-./build/scrutiny-cnapp
+./build/scrutiny_cnapp
 
 # Or using Docker
 docker-compose up
