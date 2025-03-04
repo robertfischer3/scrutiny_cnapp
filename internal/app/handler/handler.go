@@ -39,7 +39,10 @@ func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(user)
+	if err := json.NewEncoder(w).Encode(user); err != nil {
+		logger.GetLogger().Errorf("Failed to encode user response: %v", err)
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+	}
 }
 
 // GetAllUsers handles GET requests for all users
@@ -51,7 +54,10 @@ func (h *UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(users)
+	if err := json.NewEncoder(w).Encode(users); err != nil {
+		logger.GetLogger().Errorf("Failed to encode users response: %v", err)
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+	}
 }
 
 // CreateUser handles POST requests to create a new user
@@ -70,7 +76,11 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(createdUser)
+	if err := json.NewEncoder(w).Encode(createdUser); err != nil {
+		logger.GetLogger().Errorf("Failed to encode created user response: %v", err)
+		// Note: Since we already wrote the status code, we can't use http.Error here
+		logger.GetLogger().Error("Failed to send response after header was written")
+	}
 }
 
 // LoggingMiddleware logs information about each request
@@ -98,7 +108,9 @@ func RegisterHandlers(r *mux.Router) {
 	// For now, we'll create a simple health check endpoint
 	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("OK"))
+		if _, err := w.Write([]byte("OK")); err != nil {
+			logger.GetLogger().Errorf("Failed to write health check response: %v", err)
+		}
 	}).Methods("GET")
 	
 	// Add API version prefix
@@ -106,7 +118,10 @@ func RegisterHandlers(r *mux.Router) {
 	
 	// Health routes
 	apiRouter.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]string{"status": "OK"})
+		if err := json.NewEncoder(w).Encode(map[string]string{"status": "OK"}); err != nil {
+			logger.GetLogger().Errorf("Failed to encode health response: %v", err)
+			http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+		}
 	}).Methods("GET")
 	
 	// TODO: Add actual user handlers when repositories are implemented
