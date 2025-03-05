@@ -9,6 +9,7 @@ import (
 // Common errors
 var (
 	ErrNoRows = errors.New("no rows in result set")
+	ErrTxDone = errors.New("transaction has already been committed or rolled back")
 )
 
 // Config holds database configuration parameters

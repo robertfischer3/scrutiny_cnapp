@@ -125,7 +125,14 @@ func (r *PostgresUserRepository) Create(user service.User) (service.User, error)
 	if err != nil {
 		return service.User{}, appErrors.NewDatabaseError("failed to begin transaction", err)
 	}
-	defer tx.Rollback() // Rollback if not committed
+	
+	// Use defer with a function to handle the rollback error
+	defer func() {
+		if err := tx.Rollback(); err != nil && !errors.Is(err, database.ErrTxDone) {
+			// Only log the error, don't override the function's error return
+			r.logger.WithError(err).Error("failed to rollback transaction")
+		}
+	}()
 
 	now := time.Now().UTC()
 
@@ -170,7 +177,14 @@ func (r *PostgresUserRepository) Update(user service.User) error {
 	if err != nil {
 		return appErrors.NewDatabaseError("failed to begin transaction", err)
 	}
-	defer tx.Rollback() // Rollback if not committed
+	
+	// Use defer with a function to handle the rollback error
+	defer func() {
+		if err := tx.Rollback(); err != nil && !errors.Is(err, database.ErrTxDone) {
+			// Only log the error, don't override the function's error return
+			r.logger.WithError(err).Error("failed to rollback transaction")
+		}
+	}()
 
 	now := time.Now().UTC()
 
@@ -219,7 +233,14 @@ func (r *PostgresUserRepository) Delete(id int) error {
 	if err != nil {
 		return appErrors.NewDatabaseError("failed to begin transaction", err)
 	}
-	defer tx.Rollback() // Rollback if not committed
+	
+	// Use defer with a function to handle the rollback error
+	defer func() {
+		if err := tx.Rollback(); err != nil && !errors.Is(err, database.ErrTxDone) {
+			// Only log the error, don't override the function's error return
+			r.logger.WithError(err).Error("failed to rollback transaction")
+		}
+	}()
 
 	query := `
 		DELETE FROM users
